@@ -18,3 +18,13 @@ module "network" {
   private_subnets_cidr = ["10.1.1.0/24", "10.1.3.0/24"]
   availability_zones   = local.production_availability_zones
 }
+
+module "cluster" {
+  source = "./modules/cluster"
+
+  ecs_cluster_name         = "dev-nops-demo"
+  environment              = local.environment
+  vpc_id                   = module.network.vpc_id
+  load_balancer_subnet_ids = module.network.public_subnets_id
+}
+
