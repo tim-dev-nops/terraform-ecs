@@ -28,3 +28,16 @@ module "cluster" {
   load_balancer_subnet_ids = module.network.public_subnets_id
 }
 
+module "service" {
+  source = "./modules/service"
+
+  environment                     = local.environment
+  vpc_id                          = module.network.vpc_id
+  service_name                    = "dev-nops-demo-service"
+  service_listener_rule_priority  = 100
+  service_path_patterns           = ["/dev-nops-demo/*"]
+  listern_id                      = module.cluster.cluster_alb_listener_id
+  cluster_id                      = module.cluster.ecs_cluster_id
+  service_subnet_ids              = module.network.private_subnets_id
+  load_balancer_security_group_id = module.cluster.load_balancer_security_group_id
+}
